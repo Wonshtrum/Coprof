@@ -1,6 +1,6 @@
 from sys import argv, stderr, exit
 import json
-from config import categories
+from .config import categories
 
 import tkinter
 from tkinter import ttk

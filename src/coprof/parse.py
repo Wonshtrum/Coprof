@@ -1,7 +1,7 @@
 from sys import argv, stderr, exit
 import json
 import re
-from config import categories
+from .config import categories
 
 
 def help():

@@ -1,0 +1,3 @@
+[console_scripts]
+coprof = coprof.cli:main_cli
+

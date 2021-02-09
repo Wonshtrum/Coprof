@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: Coprof
+Version: 0.1.0
+Summary: Compare Profiling
+Home-page: http://cerfacs.fr/coop
+Author: Eloi Démolis
+Author-email: coop@cerfacs.fr
+License: UNKNOWN
+Description: # Coprof
+        
+        Conversion of output files from gprof to json.
+        Visual comparison of profiles.
+        
+Keywords: gprof
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
