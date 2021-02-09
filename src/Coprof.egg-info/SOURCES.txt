@@ -5,6 +5,7 @@ src/Coprof.egg-info/SOURCES.txt
 src/Coprof.egg-info/dependency_links.txt
 src/Coprof.egg-info/entry_points.txt
 src/Coprof.egg-info/not-zip-safe
+src/Coprof.egg-info/requires.txt
 src/Coprof.egg-info/top_level.txt
 src/coprof/__init__.py
 src/coprof/cli.py

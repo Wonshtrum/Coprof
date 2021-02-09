@@ -30,6 +30,11 @@ setup(
 	long_description=long_description,
 	long_description_content_type="text/markdown",
 	keywords=["gprof"],
+	install_requires=[
+		"setuptools",
+		"matplotlib",
+		"click",
+	],
 	author="Eloi Démolis",
 	author_email="coop@cerfacs.fr",
 	url="http://cerfacs.fr/coop",
