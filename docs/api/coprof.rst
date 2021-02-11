@@ -1,5 +1,5 @@
 coprof package
-=================
+==============
 
 .. automodule:: coprof
    :members:
@@ -9,26 +9,34 @@ coprof package
 Submodules
 ----------
 
-coprof.parse module
----------------------------
+coprof.cli module
+-----------------
 
-.. automodule:: coprof.parse
+.. automodule:: coprof.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+coprof.config module
+--------------------
+
+.. automodule:: coprof.config
    :members:
    :undoc-members:
    :show-inheritance:
 
 coprof.diff module
----------------------------
+------------------
 
 .. automodule:: coprof.diff
    :members:
    :undoc-members:
    :show-inheritance:
 
-coprof.cli module
----------------------------
+coprof.parse module
+-------------------
 
-.. automodule:: coprof.cli
+.. automodule:: coprof.parse
    :members:
    :undoc-members:
    :show-inheritance:

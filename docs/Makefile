@@ -18,3 +18,11 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: rebuild
+rebuild:
+	make clean
+	rm -rf api
+	sphinx-apidoc ../src/coprof -o ./api --module-first --no-toc
+	cd .. && python3 setup.py install
+	make html

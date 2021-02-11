@@ -1,5 +1,5 @@
 """
-Command line of coprof
+Command line of coprof.
 """
 
 import click

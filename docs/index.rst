@@ -5,7 +5,7 @@ Contents:
 
 .. toctree::
 	readme_copy
-	./coprof
+	./api/coprof
 
 
 Indices and tables
