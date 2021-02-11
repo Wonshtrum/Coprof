@@ -1,10 +1,9 @@
-""" command line of coprof """
+"""
+Command line of coprof
+"""
 
 import click
 import coprof
-
-# not to be used aside of the CLI
-__all__ = []
 
 @click.group()
 def main_cli():
