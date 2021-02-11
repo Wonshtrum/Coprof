@@ -1,5 +1,3 @@
-coprof package
-==============
 
 .. automodule:: coprof
    :members:
@@ -9,34 +7,10 @@ coprof package
 Submodules
 ----------
 
-coprof.cli module
------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: coprof.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-coprof.config module
---------------------
-
-.. automodule:: coprof.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-coprof.diff module
-------------------
-
-.. automodule:: coprof.diff
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-coprof.parse module
--------------------
-
-.. automodule:: coprof.parse
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   coprof.cli
+   coprof.config
+   coprof.diff
+   coprof.parse

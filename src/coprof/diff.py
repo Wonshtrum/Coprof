@@ -1,3 +1,6 @@
+"""
+Compare multiple json profiles from coprof.parse.
+"""
 from sys import argv, stderr, exit
 import json
 from .config import categories
@@ -9,11 +12,14 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
+
 def help():
+	"""Display help message in case of invalid command."""
 	print(f'Use {argv[0]} analysis.json [analysis2.json,...]', file=stderr)
 
 
 def read(files):
+	"""From a list of file names, return the list of there content and the list of there normalized names."""
 	programs = []
 	names = []
 	for name in files:
@@ -27,12 +33,14 @@ def read(files):
 
 
 def get_functions(programs):
+	"""Given a list of json profiles, return the list of unique function names among all profiles."""
 	functions = set()
 	for program in programs:
 		functions.update(program.keys())
 	return list(functions)
 
 def collect(programs, functions):
+	"""Given a list of json profiles and a list of function names, return the list of pairs (function, costs) for each functions, where costs is the list of all costs of all profiles for a given function. This structure is then called an "aggregate"."""
 	aggregate = []
 	for function in functions:
 		costs = []
@@ -42,21 +50,33 @@ def collect(programs, functions):
 	return aggregate
 
 def select(aggregate, key):
+	"""Given an aggregate and a metric, return the list of pairs (function, costs) where costs is the list of costs of the given metric for all profiles. The list is sorted so that the costier function are first."""
 	selection = [(name, [cost.get(key) if cost else None for cost in costs]) for name, costs in aggregate]
 	selection.sort(key=lambda costs:sum(cost for cost in costs[1] if cost is not None), reverse=True)
 	return selection
 
 
 def static_compare(programs, names):
+	"""Not implemented yet. This function should output a "static comparison" of the profiles in a text format."""
 	for program in programs:
 		#print(program.keys())
 		pass
 
 
 class Graph:
+	"""This class contains all the data and parameters mandatory to display and adjust the graphical comparison of profiles."""
 	VERTICAL = 0
 	HORIZONTAL = 1
 	def __init__(self, programs, names, key=categories[0], limit=10, direction=HORIZONTAL, reverse=False):
+		"""Initialization of the graph
+
+		:param programs: a list of json profiles
+		:param names: the list of names corresponding to the profiles
+		:key: the cost metric to compare
+		:limit: the maximum number of functions compared at once
+		:direction: wether the graph is vertical or horizontal
+		:reverse: reverse the order of appearence of the functions
+		"""
 		self.key = key
 		self.direction = direction
 		self.reverse = reverse
@@ -96,18 +116,22 @@ class Graph:
 		tkinter.mainloop()
 	
 	def update_category(self, event):
+		"""Handle the graph update upon category modification."""
 		self.key = self.list_categories.get()
 		self.selection = select(self.aggregate, self.key)
 		self.draw()
 	def update_direction(self):
+		"""Handle the graph update upon direction modification."""
 		checked = self.check_direction.instate(['selected'])
 		self.direction = Graph.VERTICAL if checked else Graph.HORIZONTAL
 		self.draw()
 	def update_limit(self):
+		"""Handle the graph update upon limit modification."""
 		self.limit = int(self.spin_limit.get())
 		self.draw()
 
 	def draw(self):
+		"""Draw the graph from scracth, given all the parameters stored in the class (key, limit, direction, reverse)."""
 		plt.cla()
 
 		selection = self.selection[:self.limit]
@@ -157,6 +181,7 @@ class Graph:
 
 
 def compare(programs, names):
+	"""Compare a list json profile (with their respective names)."""
 	if not programs:
 		print('Not a single file has been successfully decoded', file=stderr)
 		return

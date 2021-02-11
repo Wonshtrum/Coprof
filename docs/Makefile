@@ -23,6 +23,7 @@ help:
 rebuild:
 	make clean
 	rm -rf api
-	sphinx-apidoc ../src/coprof -o ./api --module-first --no-toc
+	sphinx-apidoc ../src/coprof -o ./api --module-first --no-toc --separate
+	tail -n +3 api/coprof.rst > tmp && mv tmp api/coprof.rst
 	cd .. && python3 setup.py install
 	make html
