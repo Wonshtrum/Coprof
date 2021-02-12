@@ -1,21 +1,20 @@
 """
 Compare multiple json profiles from coprof.parse.
 """
-from sys import argv, stderr, exit
+from sys import stderr, exit
 import json
 from .config import categories
 
 import tkinter
 from tkinter import ttk
-import matplotlib.pyplot as plt
+from sys import platform as sys_pf
+if sys_pf=='darwin':
+	import matplotlib
+	matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
-
-
-def help():
-	"""Display help message in case of invalid command."""
-	print(f'Use {argv[0]} analysis.json [analysis2.json,...]', file=stderr)
 
 
 def read(files):
@@ -107,8 +106,6 @@ class Graph:
 
 		self.canvas = FigureCanvasTkAgg(self.fig, master=root)
 		self.canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
-		#toolbar = NavigationToolbar2Tk(self.canvas, root)
-		#toolbar.update()
 		self.canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
 
 		self.draw()
@@ -188,9 +185,3 @@ def compare(programs, names):
 	if len(programs) > 1:
 		static_compare(programs, names)
 	Graph(programs, names)
-
-if __name__ == '__main__':
-	if len(argv) < 2:
-		help()
-	else:
-		compare(*read(argv[1:]))

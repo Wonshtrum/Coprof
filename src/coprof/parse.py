@@ -1,16 +1,10 @@
 """
 Parse gprof output (from analysis or gmon directly) and create a json containing the flat analysis.
 """
-from sys import argv, stderr, exit
+from sys import stderr, exit
 import json
 import re
 from .config import categories
-
-
-def help():
-	"""Display help message in case of invalid command."""
-	print(f'Use: {argv[0]} analysis.txt [output]', file=stderr)
-	print(f'or: {argv[0]} -a gmon.out program [output]', file=stderr)
 
 
 class Holder:
@@ -64,10 +58,10 @@ def parse(handle, readline, holder = Medium):
 	data_section = False
 	result = holder()
 
-	with handle as flux:
+	with handle as stream:
 		# Read until end of gprof flat profile header
 		while not data_section:
-			line = readline(flux)
+			line = readline(stream)
 			if not line:
 				print('Unexpected EOF, bad format: header wasn\'t found', file=stderr)
 				exit()
@@ -83,7 +77,7 @@ def parse(handle, readline, holder = Medium):
 		columns[-1] = -1
 
 		# Parse each line of the table
-		line = readline(flux)
+		line = readline(stream)
 		while line and len(line) > 1:
 			start_column = columns[0]
 			entry = []
@@ -91,7 +85,7 @@ def parse(handle, readline, holder = Medium):
 				entry.append(line[start_column:end_column].replace(' ', ''))
 				start_column = end_column
 			result.add_entry(entry)
-			line = readline(flux)
+			line = readline(stream)
 	return result.dump()
 
 
@@ -99,14 +93,18 @@ def gprof(gmon, program):
 	"""Coprof can handle raw gmon file. To do so, the gmon and program files content must be processed by this function.
 	The standard gprof analysis is outputed through a data stream and an access method."""
 	import subprocess as sp
-	handle = sp.Popen(['gprof', program, gmon], stdout=sp.PIPE)
-	access = lambda flux: flux.stdout.readline().decode()
+	try:
+		handle = sp.Popen(['gprof', program, gmon], stdout=sp.PIPE)
+	except Exception as e:
+		print(f'Error: {e}', file=stderr)
+		exit()
+	access = lambda stream: stream.stdout.readline().decode()
 	return handle, access
 
 def from_file(path):
 	"""Create a data stream and an access method from a gprof analysis file."""
-	handle = open(argv[1], 'r')
-	access = lambda flux: flux.readline()
+	handle = open(path, 'r')
+	access = lambda stream: stream.readline()
 	return handle, access
 
 def default_output(path):
@@ -119,22 +117,3 @@ def write_back(output, path):
 	"""Write the resulting json in an output file for further comparison."""
 	with open(path, 'w') as fout:
 		fout.write(output)
-
-
-if __name__ == '__main__':
-	length = len(argv)
-	assemble = length > 1 and argv[1] == '-a'
-	full_length = 5 if assemble else 3
-	if length == full_length:
-		output = argv[-1]
-	elif length == full_length-1:
-		output = default_output(argv[-1])
-	else:
-		help()
-		exit()
-
-	if assemble:
-		handle = gprof(argv[2], argv[3])
-	else:
-		handle = from_file(argv[1])
-	write_back(parse(*handle), output)
